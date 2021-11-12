@@ -1,5 +1,5 @@
 import logging
-import test_random
+from folder import test_random
 import sys
 import pytest
 from pytest_reportportal import RPLogger, RPLogHandler

@@ -8,8 +8,7 @@ import time
 
 class TestCase():
 
-    @pytest.mark.parametrize('number', ['0', '1', '2', '3', '4', '5', '6',
-                                        pytest.param(7, marks=pytest.mark.xfail), '8', '9'])
+    @pytest.mark.parametrize('number', [pytest.param(7, marks=pytest.mark.xfail), '8'])
     @pytest.mark.smoke
     def test_guest_can_add_product_to_cart(self, browser, number):
         link = f'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer{number}'
@@ -73,7 +72,10 @@ class TestCase():
         link = "https://selenium1py.pythonanywhere.com/en-gb/catalogue/the-shellcoders-handbook_209/"
         product_page = ProductPage(browser, link)
         product_page.open()
-        product_page.enter_the_cart()
+        try:
+            product_page.enter_the_cart()
+        except:
+            browser.save_screenshot('screen1.png')
         assert product_page.is_not_element_present(*ProductPageLocators.BASKET_EMPTY_PROOF), \
             "Message about total price is presented, but should not be"
 

@@ -1,0 +1,43 @@
+version: "3.8" # версия docker-compose файла
+services: #service = container(соответственно: selenium-hub, chrome, firefox-контейнеры)
+
+  selenium-hub:
+    image: selenium/hub # uses selenium hub image
+    ports:
+      - "4444:4444"   #just a port
+    environment:
+        GRID_MAX_SESSION: 16 # only 16 browsers at one time can run on this grid
+        GRID_BROWSER_TIMEOUT: 3006
+        GRID_TIMEOUT: 300
+
+  chrome:
+    image: selenium/node-chrome #uses headless node-chrome image
+    depends_on:
+      - selenium-hub #has to wait for selenium-hub container to be up and running in order to be successfully created
+    environment:
+      HUB_PORT_4444_TCP_ADDR: selenium-hub #connecting to selenium hub
+      HUB_PORT_4444_TCP_PORT: 4444 #exposing the port
+      NODE_MAX_SESSION: 2      #those 2 two's mean that this container will have 2 browsers on it
+      NODE_MAX_INSTANCES: 2
+#     volumes:
+#       - /dev/shm:/dev/shm
+
+  firefox1:
+    image: selenium/node-firefox
+    depends_on:
+      - selenium-hub
+    environment:
+      HUB_PORT_4444_TCP_ADDR: selenium-hub
+      HUB_PORT_4444_TCP_PORT: 4444
+      NODE_MAX_SESSION: 4    # will have 4 firefox browsers running
+      NODE_MAX_INSTANCES: 4
+
+  firefox2:
+    image: selenium/node-firefox
+    depends_on:
+      - selenium-hub
+    environment:
+      HUB_PORT_4444_TCP_ADDR: selenium-hub
+      HUB_PORT_4444_TCP_PORT: 4444
+      NODE_MAX_SESSION: 4    # will have 4 firefox browsers running
+      NODE_MAX_INSTANCES: 4
