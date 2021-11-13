@@ -71,4 +71,4 @@ utils==1.0.1
 uuid==1.30
 virtualenv==20.8.1
 virtualenv-clone==0.5.7
-Werkzeug==2.0.2
+
